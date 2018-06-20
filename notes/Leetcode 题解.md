@@ -366,7 +366,7 @@ public int maxProfit(int[] prices) {
 
 双指针主要用于遍历数组，两个指针指向不同的元素，从而协同完成任务。
 
-**有序数组的 Tow Sum** 
+**有序数组的 Two Sum** 
 
 [Leetcode ：167. Two Sum II - Input array is sorted (Easy)](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/)
 
@@ -3116,7 +3116,9 @@ the contiguous subarray [4,-1,2,1] has the largest sum = 6.
 
 ```java
 public int maxSubArray(int[] nums) {
-    if (nums == null || nums.length == 0) return 0;
+    if (nums == null || nums.length == 0) {
+        return 0;
+    }
     int preSum = nums[0];
     int maxSum = preSum;
     for (int i = 1; i < nums.length; i++) {
@@ -3142,7 +3144,9 @@ dp[i] 表示以 A[i] 为结尾的等差递增子区间的个数。
 
 ```java
 public int numberOfArithmeticSlices(int[] A) {
-    if (A == null || A.length == 0) return 0;
+    if (A == null || A.length == 0) {
+        return 0;
+    }
     int n = A.length;
     int[] dp = new int[n];
     for (int i = 2; i < n; i++) {
@@ -3150,9 +3154,11 @@ public int numberOfArithmeticSlices(int[] A) {
             dp[i] = dp[i - 1] + 1;
         }
     }
-    int ret = 0;
-    for (int cnt : dp) ret += cnt;
-    return ret;
+    int total = 0;
+    for (int cnt : dp) {
+        total += cnt;
+    }
+    return total;
 }
 ```
 
@@ -3176,16 +3182,21 @@ public int minDistance(String word1, String word2) {
     int[][] dp = new int[m + 1][n + 1];
     for (int i = 0; i <= m; i++) {
         for (int j = 0; j <= n; j++) {
-            if (i == 0 || j == 0) continue;
-            dp[i][j] = word1.charAt(i - 1) == word2.charAt(j - 1) ?
-                    dp[i - 1][j - 1] + 1 : Math.max(dp[i][j - 1], dp[i - 1][j]);
+            if (i == 0 || j == 0) {
+                continue;
+            }
+            if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+            }
         }
     }
     return m + n - 2 * dp[m][n];
 }
 ```
 
-**修改一个字符串成为另一个字符串** 
+**编辑距离** 
 
 [72. Edit Distance (Hard)](https://leetcode.com/problems/edit-distance/description/)
 
@@ -3194,7 +3205,7 @@ Example 1:
 
 Input: word1 = "horse", word2 = "ros"
 Output: 3
-Explanation: 
+Explanation:
 horse -> rorse (replace 'h' with 'r')
 rorse -> rose (remove 'r')
 rose -> ros (remove 'e')
@@ -3202,13 +3213,15 @@ Example 2:
 
 Input: word1 = "intention", word2 = "execution"
 Output: 5
-Explanation: 
+Explanation:
 intention -> inention (remove 't')
 inention -> enention (replace 'i' with 'e')
 enention -> exention (replace 'n' with 'x')
 exention -> exection (replace 'n' with 'c')
 exection -> execution (insert 'u')
 ```
+
+题目描述：修改一个字符串成为另一个字符串，使得修改次数最少。一次修改操作包括：插入一个字符、删除一个字符、替换一个字符。
 
 ```java
 public int minDistance(String word1, String word2) {
@@ -3248,8 +3261,8 @@ public int minDistance(String word1, String word2) {
 public int integerBreak(int n) {
     int[] dp = new int[n + 1];
     dp[1] = 1;
-    for(int i = 2; i <= n; i++) {
-        for(int j = 1; j <= i - 1; j++) {
+    for (int i = 2; i <= n; i++) {
+        for (int j = 1; j <= i - 1; j++) {
             dp[i] = Math.max(dp[i], Math.max(j * dp[i - j], j * (i - j)));
         }
     }
@@ -3270,7 +3283,9 @@ public int numSquares(int n) {
     for (int i = 1; i <= n; i++) {
         int min = Integer.MAX_VALUE;
         for (int square : squareList) {
-            if (square > i) break;
+            if (square > i) {
+                break;
+            }
             min = Math.min(min, dp[i - square] + 1);
         }
         dp[i] = min;
@@ -3299,17 +3314,25 @@ private List<Integer> generateSquareList(int n) {
 
 ```java
 public int numDecodings(String s) {
-    if(s == null || s.length() == 0) return 0;
+    if (s == null || s.length() == 0) {
+        return 0;
+    }
     int n = s.length();
     int[] dp = new int[n + 1];
     dp[0] = 1;
     dp[1] = s.charAt(0) == '0' ? 0 : 1;
-    for(int i = 2; i <= n; i++) {
+    for (int i = 2; i <= n; i++) {
         int one = Integer.valueOf(s.substring(i - 1, i));
-        if(one != 0) dp[i] += dp[i - 1];
-        if(s.charAt(i - 2) == '0') continue;
+        if (one != 0) {
+            dp[i] += dp[i - 1];
+        }
+        if (s.charAt(i - 2) == '0') {
+            continue;
+        }
         int two = Integer.valueOf(s.substring(i - 2, i));
-        if(two <= 26) dp[i] += dp[i - 2];
+        if (two <= 26) {
+            dp[i] += dp[i - 2];
+        }
     }
     return dp[n];
 }
@@ -3342,8 +3365,8 @@ public int uniquePaths(int m, int n) {
 
 ```java
 public int uniquePaths(int m, int n) {
-    int S = m + n - 2; // 总共的移动次数
-    int D = m - 1;     // 向下的移动次数
+    int S = m + n - 2;  // 总共的移动次数
+    int D = m - 1;      // 向下的移动次数
     long ret = 1;
     for (int i = 1; i <= D; i++) {
         ret = ret * (S - D + i) / i;
@@ -3367,14 +3390,20 @@ Given the above grid map, return 7. Because the path 1→3→1→1→1 minimizes
 
 ```java
 public int minPathSum(int[][] grid) {
-    if (grid.length == 0 || grid[0].length == 0) return 0;
+    if (grid.length == 0 || grid[0].length == 0) {
+        return 0;
+    }
     int m = grid.length, n = grid[0].length;
     int[] dp = new int[n];
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
-            if (j == 0) dp[0] = dp[0] + grid[i][0];           // 只能从上侧走到该位置
-            else if (i == 0) dp[j] = dp[j - 1] + grid[0][j];  // 只能从右侧走到该位置
-            else dp[j] = Math.min(dp[j - 1], dp[j]) + grid[i][j];
+            if (j == 0) {
+                dp[0] = dp[0] + grid[i][0];      // 只能从上侧走到该位置
+            } else if (i == 0) {
+                dp[j] = dp[j - 1] + grid[0][j];  // 只能从右侧走到该位置
+            } else {
+                dp[j] = Math.min(dp[j - 1], dp[j]) + grid[i][j];
+            }
         }
     }
     return dp[n - 1];
@@ -3517,11 +3546,11 @@ public int minSteps(int n) {
 
 ### 素数
 
-（一）素数分解
+**素数分解** 
 
 每一个数都可以分解成素数的乘积，例如 84 = 2<sup>2</sup> \* 3<sup>1</sup> \* 5<sup>0</sup> \* 7<sup>1</sup> \* 11<sup>0</sup> \* 13<sup>0</sup> \* 17<sup>0</sup> \* …
 
-（二）整除
+**整除** 
 
 令 x = 2<sup>m0</sup> \* 3<sup>m1</sup> \* 5<sup>m2</sup> \* 7<sup>m3</sup> \* 11<sup>m4</sup> \* …
 
@@ -3529,7 +3558,7 @@ public int minSteps(int n) {
 
 如果 x 整除 y（y mod x == 0），则对于所有 i，mi <= ni。
 
-（三）最大公约数最小公倍数
+**最大公约数最小公倍数** 
 
 x 和 y 的最大公约数为：gcd(x,y) =  2<sup>min(m0,n0)</sup> \* 3<sup>min(m1,n1)</sup> \* 5<sup>min(m2,n2)</sup> \* ...
 
@@ -4559,12 +4588,18 @@ For example, given nums = [0, 1, 0, 3, 12], after calling your function, nums sh
 ```java
 public void moveZeroes(int[] nums) {
     int idx = 0;
-    for (int num : nums) if (num != 0) nums[idx++] = num;
-    while (idx < nums.length) nums[idx++] = 0;
+    for (int num : nums) {
+        if (num != 0) {
+            nums[idx++] = num;
+        }
+    }
+    while (idx < nums.length) {
+        nums[idx++] = 0;
+    }
 }
 ```
 
-**调整矩阵** 
+**改变矩阵维度** 
 
 [566. Reshape the Matrix (Easy)](https://leetcode.com/problems/reshape-the-matrix/description/)
 
@@ -4574,8 +4609,10 @@ nums =
 [[1,2],
  [3,4]]
 r = 1, c = 4
+
 Output:
 [[1,2,3,4]]
+
 Explanation:
 The row-traversing of nums is [1,2,3,4]. The new reshaped matrix is a 1 * 4 matrix, fill it row by row by using the previous list.
 ```
@@ -4583,16 +4620,18 @@ The row-traversing of nums is [1,2,3,4]. The new reshaped matrix is a 1 * 4 matr
 ```java
 public int[][] matrixReshape(int[][] nums, int r, int c) {
     int m = nums.length, n = nums[0].length;
-    if (m * n != r * c) return nums;
-    int[][] ret = new int[r][c];
+    if (m * n != r * c) {
+        return nums;
+    }
+    int[][] reshapedNums = new int[r][c];
     int index = 0;
     for (int i = 0; i < r; i++) {
         for (int j = 0; j < c; j++) {
-            ret[i][j] = nums[index / n][index % n];
+            reshapedNums[i][j] = nums[index / n][index % n];
             index++;
         }
     }
-    return ret;
+    return reshapedNums;
 }
 ```
 
@@ -4603,15 +4642,15 @@ public int[][] matrixReshape(int[][] nums, int r, int c) {
 ```java
 public int findMaxConsecutiveOnes(int[] nums) {
     int max = 0, cur = 0;
-    for (int num : nums) {
-        cur = num == 0 ? 0 : cur + 1;
+    for (int x : nums) {
+        cur = x == 0 ? 0 : cur + 1;
         max = Math.max(max, cur);
     }
     return max;
 }
 ```
 
-**一个数组元素在 [1, n] 之间，其中一个数被替换为另一个数，找出丢失的数和重复的数** 
+**一个数组元素在 [1, n] 之间，其中一个数被替换为另一个数，找出重复的数和丢失的数** 
 
 [645. Set Mismatch (Easy)](https://leetcode.com/problems/set-mismatch/description/)
 
@@ -4627,24 +4666,27 @@ Output: [2,3]
 
 最直接的方法是先对数组进行排序，这种方法时间复杂度为 O(NlogN)。本题可以以 O(N) 的时间复杂度、O(1) 空间复杂度来求解。
 
-主要思想是通过交换数组元素，使得数组上的元素在正确的位置上。遍历数组，如果第 i 位上的元素不是 i + 1，那么就交换第 i 位和 nums[i] - 1 位上的元素，使得 num[i] - 1 位置上的元素为 nums[i]，也就是该位置上的元素是正确的。
+主要思想是通过交换数组元素，使得数组上的元素在正确的位置上。遍历数组，如果第 i 位上的元素不是 i + 1，那么一直交换第 i 位和 nums[i] - 1 位置上的元素。
 
 ```java
 public int[] findErrorNums(int[] nums) {
     for (int i = 0; i < nums.length; i++) {
-        while (nums[i] != i + 1) {
-            if (nums[i] == nums[nums[i] - 1]) {
-                return new int[]{nums[nums[i] - 1], i + 1};
-            }
+        while (nums[i] != i + 1 && nums[nums[i] - 1] != nums[i]) {
             swap(nums, i, nums[i] - 1);
         }
     }
-
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] != i + 1) {
+            return new int[]{nums[i], i + 1};
+        }
+    }
     return null;
 }
 
 private void swap(int[] nums, int i, int j) {
-    int tmp = nums[i]; nums[i] = nums[j]; nums[j] = tmp;
+    int tmp = nums[i];
+    nums[i] = nums[j];
+    nums[j] = tmp;
 }
 ```
 
@@ -4963,13 +5005,13 @@ public int maxChunksToSorted(int[] arr) {
 
 ```html
 A:          a1 → a2
-                  ↘
-                    c1 → c2 → c3
-                  ↗
+                    ↘
+                      c1 → c2 → c3
+                    ↗
 B:    b1 → b2 → b3
 ```
 
-要求：时间复杂度为 O(N) 空间复杂度为 O(1)
+要求：时间复杂度为 O(N)，空间复杂度为 O(1)
 
 设 A 的长度为 a + c，B 的长度为 b + c，其中 c 为尾部公共部分长度，可知 a + c + b = b + c + a。
 
@@ -4986,7 +5028,7 @@ public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
 }
 ```
 
-如果只是判断是否存在交点，那么就是另一个问题，即 [编程之美：3.6]() 的问题。有两种解法：把第一个链表的结尾连接到第二个链表的开头，看第二个链表是否存在环；或者直接比较第一个链表最后一个节点和第二个链表最后一个节点是否相同。
+如果只是判断是否存在交点，那么就是另一个问题，即 [编程之美：3.6]() 的问题。有两种解法：把第一个链表的结尾连接到第二个链表的开头，看第二个链表是否存在环；或者直接比较两个链表的最后一个节点是否相同。
 
 **链表反转** 
 
@@ -4996,7 +5038,9 @@ public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
 
 ```java
 public ListNode reverseList(ListNode head) {
-    if (head == null || head.next == null) return head;
+    if (head == null || head.next == null) {
+        return head;
+    }
     ListNode next = head.next;
     ListNode newHead = reverseList(next);
     next.next = head;
@@ -5049,9 +5093,9 @@ Given 1->1->2->3->3, return 1->2->3.
 
 ```java
 public ListNode deleteDuplicates(ListNode head) {
-    if (head == null || head.next == null) return head;
+    if(head == null || head.next == null) return head;
     head.next = deleteDuplicates(head.next);
-    return head.next != null && head.val == head.next.val ? head.next : head;
+    return head.val == head.next.val ? head.next : head;
 }
 ```
 
@@ -5066,19 +5110,18 @@ After removing the second node from the end, the linked list becomes 1->2->3->5.
 
 ```java
 public ListNode removeNthFromEnd(ListNode head, int n) {
-    ListNode newHead = new ListNode(-1);
-    newHead.next = head;
-    ListNode fast = newHead;
+    ListNode fast = head;
     while (n-- > 0) {
         fast = fast.next;
     }
-    ListNode slow = newHead;
+    if (fast == null) return head.next;
+    ListNode slow = head;
     while (fast.next != null) {
         fast = fast.next;
         slow = slow.next;
     }
     slow.next = slow.next.next;
-    return newHead.next;
+    return head;
 }
 ```
 
@@ -5090,22 +5133,23 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
 Given 1->2->3->4, you should return the list as 2->1->4->3.
 ```
 
-题目要求：不能修改结点的 val 值；O(1) 空间复杂度。
+题目要求：不能修改结点的 val 值，O(1) 空间复杂度。
 
 ```java
 public ListNode swapPairs(ListNode head) {
-    ListNode newHead = new ListNode(-1);
-    newHead.next = head;
-    ListNode cur = head, pre = newHead;
-    while (cur != null && cur.next != null) {
-        ListNode next = cur.next;
-        pre.next = next;
-        cur.next = next.next;
-        next.next = cur;
-        pre = cur;
-        cur = cur.next;
+    ListNode node = new ListNode(-1);
+    node.next = head;
+    ListNode pre = node;
+    while (pre.next != null && pre.next.next != null) {
+        ListNode l1 = pre.next, l2 = pre.next.next;
+        ListNode next = l2.next;
+        l1.next = next;
+        l2.next = l1;
+        pre.next = l2;
+
+        pre = l1;
     }
-    return newHead.next;
+    return node.next;
 }
 ```
 
@@ -5152,7 +5196,7 @@ private Stack<Integer> buildStack(ListNode l) {
 
 [234. Palindrome Linked List (Easy)](https://leetcode.com/problems/palindrome-linked-list/description/)
 
-要求以 O(1) 的空间复杂度来求解。
+题目要求：以 O(1) 的空间复杂度来求解。
 
 切成两半，把后半段反转，然后比较两半是否相等。
 
@@ -5164,19 +5208,15 @@ public boolean isPalindrome(ListNode head) {
         slow = slow.next;
         fast = fast.next.next;
     }
-
-    if (fast != null) {  // 偶数节点，让 slow 指向下一个节点
-        slow = slow.next;
-    }
-
-    cut(head, slow); // 切成两个链表
-    ListNode l1 = head, l2 = slow;
-    l2 = reverse(l2);
-    return isEqual(l1, l2);
+    if (fast != null) slow = slow.next;  // 偶数节点，让 slow 指向下一个节点
+    cut(head, slow);                     // 切成两个链表
+    return isEqual(head, reverse(slow));
 }
 
 private void cut(ListNode head, ListNode cutNode) {
-    while (head.next != cutNode) head = head.next;
+    while (head.next != cutNode) {
+        head = head.next;
+    }
     head.next = null;
 }
 
@@ -5198,33 +5238,6 @@ private boolean isEqual(ListNode l1, ListNode l2) {
         l2 = l2.next;
     }
     return true;
-}
-```
-
-**链表元素按奇偶聚集** 
-
-[328. Odd Even Linked List (Medium)](https://leetcode.com/problems/odd-even-linked-list/description/)
-
-```html
-Example:
-Given 1->2->3->4->5->NULL,
-return 1->3->5->2->4->NULL.
-```
-
-```java
-public ListNode oddEvenList(ListNode head) {
-    if (head == null) {
-        return head;
-    }
-    ListNode odd = head, even = head.next, evenHead = even;
-    while (even != null && even.next != null) {
-        odd.next = odd.next.next;
-        odd = odd.next;
-        even.next = even.next.next;
-        even = even.next;
-    }
-    odd.next = evenHead;
-    return head;
 }
 ```
 
@@ -5265,6 +5278,33 @@ public ListNode[] splitListToParts(ListNode root, int k) {
         cur = next;
     }
     return ret;
+}
+```
+
+**链表元素按奇偶聚集** 
+
+[328. Odd Even Linked List (Medium)](https://leetcode.com/problems/odd-even-linked-list/description/)
+
+```html
+Example:
+Given 1->2->3->4->5->NULL,
+return 1->3->5->2->4->NULL.
+```
+
+```java
+public ListNode oddEvenList(ListNode head) {
+    if (head == null) {
+        return head;
+    }
+    ListNode odd = head, even = head.next, evenHead = even;
+    while (even != null && even.next != null) {
+        odd.next = odd.next.next;
+        odd = odd.next;
+        even.next = even.next.next;
+        even = even.next;
+    }
+    odd.next = evenHead;
+    return head;
 }
 ```
 
@@ -6379,22 +6419,24 @@ We cannot find a way to divide the set of nodes into two independent subsets.
 public boolean isBipartite(int[][] graph) {
     int[] colors = new int[graph.length];
     Arrays.fill(colors, -1);
-    for (int i = 0; i < graph.length; i++) {
-        if (colors[i] == -1 && !isBipartite(graph, i, 0, colors))
+    for (int i = 0; i < graph.length; i++) {  // 处理图不是连通的情况
+        if (colors[i] == -1 && !isBipartite(i, 0, colors, graph)) {
             return false;
+        }
     }
     return true;
 }
 
-private boolean isBipartite(int[][] graph, int node, int color, int[] colors) {
-    if (colors[node] != -1)
-        return colors[node] == color;
-
-    colors[node] = color;
-    for (int next : graph[node])
-        if (!isBipartite(graph, next, 1 - color, colors))
+private boolean isBipartite(int curNode, int curColor, int[] colors, int[][] graph) {
+    if (colors[curNode] != -1) {
+        return colors[curNode] == curColor;
+    }
+    colors[curNode] = curColor;
+    for (int nextNode : graph[curNode]) {
+        if (!isBipartite(nextNode, 1 - curColor, colors, graph)) {
             return false;
-
+        }
+    }
     return true;
 }
 ```
@@ -6424,36 +6466,40 @@ return false
 ```java
 public boolean canFinish(int numCourses, int[][] prerequisites) {
     List<Integer>[] graphic = new List[numCourses];
-    for (int i = 0; i < numCourses; i++)
+    for (int i = 0; i < numCourses; i++) {
         graphic[i] = new ArrayList<>();
-    for (int[] pre : prerequisites)
+    }
+    for (int[] pre : prerequisites) {
         graphic[pre[0]].add(pre[1]);
-
+    }
     boolean[] globalMarked = new boolean[numCourses];
     boolean[] localMarked = new boolean[numCourses];
-    for (int i = 0; i < numCourses; i++)
-        if (!dfs(globalMarked, localMarked, graphic, i))
+    for (int i = 0; i < numCourses; i++) {
+        if (hasCycle(globalMarked, localMarked, graphic, i)) {
             return false;
-
+        }
+    }
     return true;
 }
 
-private boolean dfs(boolean[] globalMarked, boolean[] localMarked, List<Integer>[] graphic, int curNode) {
-    if (localMarked[curNode])
-        return false;
-    if (globalMarked[curNode])
-        return true;
+private boolean hasCycle(boolean[] globalMarked, boolean[] localMarked,
+                         List<Integer>[] graphic, int curNode) {
 
+    if (localMarked[curNode]) {
+        return true;
+    }
+    if (globalMarked[curNode]) {
+        return false;
+    }
     globalMarked[curNode] = true;
     localMarked[curNode] = true;
-
-    for (int nextNode : graphic[curNode])
-        if (!dfs(globalMarked, localMarked, graphic, nextNode))
-            return false;
-
+    for (int nextNode : graphic[curNode]) {
+        if (hasCycle(globalMarked, localMarked, graphic, nextNode)) {
+            return true;
+        }
+    }
     localMarked[curNode] = false;
-
-    return true;
+    return false;
 }
 ```
 
@@ -6466,48 +6512,53 @@ private boolean dfs(boolean[] globalMarked, boolean[] localMarked, List<Integer>
 There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0. So one correct course order is [0,1,2,3]. Another correct ordering is[0,2,1,3].
 ```
 
-使用 DFS 来实现拓扑排序，使用一个栈存储后序遍历结果，这个栈元素的逆序结果就是拓扑排序结果。
+使用 DFS 来实现拓扑排序，使用一个栈存储后序遍历结果，这个栈的逆序结果就是拓扑排序结果。
 
 证明：对于任何先序关系：v->w，后序遍历结果可以保证 w 先进入栈中，因此栈的逆序结果中 v 会在 w 之前。
 
 ```java
 public int[] findOrder(int numCourses, int[][] prerequisites) {
     List<Integer>[] graphic = new List[numCourses];
-    for (int i = 0; i < numCourses; i++)
+    for (int i = 0; i < numCourses; i++) {
         graphic[i] = new ArrayList<>();
-    for (int[] pre : prerequisites)
+    }
+    for (int[] pre : prerequisites) {
         graphic[pre[0]].add(pre[1]);
-
-    Stack<Integer> topologyOrder = new Stack<>();
+    }
+    Stack<Integer> postOrder = new Stack<>();
     boolean[] globalMarked = new boolean[numCourses];
     boolean[] localMarked = new boolean[numCourses];
-    for (int i = 0; i < numCourses; i++)
-        if (!dfs(globalMarked, localMarked, graphic, i, topologyOrder))
+    for (int i = 0; i < numCourses; i++) {
+        if (hasCycle(globalMarked, localMarked, graphic, i, postOrder)) {
             return new int[0];
-
-    int[] ret = new int[numCourses];
-    for (int i = numCourses - 1; i >= 0; i--)
-        ret[i] = topologyOrder.pop();
-    return ret;
+        }
+    }
+    int[] orders = new int[numCourses];
+    for (int i = numCourses - 1; i >= 0; i--) {
+        orders[i] = postOrder.pop();
+    }
+    return orders;
 }
 
-private boolean dfs(boolean[] globalMarked, boolean[] localMarked, List<Integer>[] graphic, int curNode, Stack<Integer> topologyOrder) {
-    if (localMarked[curNode])
-        return false;
-    if (globalMarked[curNode])
-        return true;
+private boolean hasCycle(boolean[] globalMarked, boolean[] localMarked, List<Integer>[] graphic,
+                         int curNode, Stack<Integer> postOrder) {
 
+    if (localMarked[curNode]) {
+        return true;
+    }
+    if (globalMarked[curNode]) {
+        return false;
+    }
     globalMarked[curNode] = true;
     localMarked[curNode] = true;
-
-    for (int nextNode : graphic[curNode])
-        if (!dfs(globalMarked, localMarked, graphic, nextNode, topologyOrder))
-            return false;
-
+    for (int nextNode : graphic[curNode]) {
+        if (hasCycle(globalMarked, localMarked, graphic, nextNode, postOrder)) {
+            return true;
+        }
+    }
     localMarked[curNode] = false;
-    topologyOrder.push(curNode);
-
-    return true;
+    postOrder.push(curNode);
+    return false;
 }
 ```
 
@@ -6530,15 +6581,13 @@ Explanation: The given undirected graph will be like this:
 
 题目描述：有一系列的边连成的图，找出一条边，移除它之后该图能够成为一棵树。
 
-使用 Union-Find。
-
 ```java
 public int[] findRedundantConnection(int[][] edges) {
     int N = edges.length;
     UF uf = new UF(N);
     for (int[] e : edges) {
         int u = e[0], v = e[1];
-        if (uf.find(u) == uf.find(v)) {
+        if (uf.connect(u, v)) {
             return e;
         }
         uf.union(u, v);
@@ -6547,7 +6596,7 @@ public int[] findRedundantConnection(int[][] edges) {
 }
 
 private class UF {
-    int[] id;
+    private int[] id;
 
     UF(int N) {
         id = new int[N + 1];
@@ -6571,6 +6620,10 @@ private class UF {
 
     int find(int p) {
         return id[p];
+    }
+
+    boolean connect(int u, int v) {
+        return find(u) == find(v);
     }
 }
 ```
